@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+    db:
+        container_name: database
+        image: mongo
+        ports:
+            - "27017:27017"
+        restart: always
+
+    ubicar_api_dev:
+        container_name: ubicar_api_dev
+        build:
+            context: ../
+            dockerfile: dockerfiles/dev.dockerfile
+        image: ubicar-api-dev
+        ports: [3000:3000]
+        links:
+            - db
+        depends_on:
+            - db
+        restart: always
+        volumes:
+            - ../:/usr/src/app/
+
+    local_tunnel_api:
+        container_name: ubicar_local_tunel_api
+        build:
+            context: ../
+            dockerfile: dockerfiles/localtunnel.dockerfile
+        image: sv-localtunnel
+        links:
+            - ubicar_api_dev
+        depends_on: 
+            - ubicar_api_dev
+        command: "lt -p 3000 -l ubicar_api_dev -s ubicar-api-dev"
