@@ -31,4 +31,7 @@ app.use("/users", users);
 import login from './routes/login';
 app.use("/login", login);
 
+import user from './routes/user';
+app.use("/api/user", user);
+
 export default app;
