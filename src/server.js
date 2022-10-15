@@ -19,8 +19,8 @@ app.use(express.static(path.join(__dirname, './views')));
 
 // Routes
 
-import cards from './routes/cards';
-app.use("/cards", cards);
+import googleAuth from './routes/googleAuth';
+app.use("/api/auth/google/signin", googleAuth);
 
 import signUp from './routes/signUp';
 app.use("/signUp", signUp);

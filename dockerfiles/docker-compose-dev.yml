@@ -14,7 +14,7 @@ services:
             context: ../
             dockerfile: dockerfiles/dev.dockerfile
         image: ubicar-api-dev
-        ports: [3000:3000]
+        ports: [4000:4000]
         links:
             - db
         depends_on:
@@ -33,4 +33,4 @@ services:
             - ubicar_api_dev
         depends_on: 
             - ubicar_api_dev
-        command: "lt -p 3000 -l ubicar_api_dev -s ubicar-api-dev"
+        command: "lt -p 4000 -l ubicar_api_dev -s ubicar-api-dev"

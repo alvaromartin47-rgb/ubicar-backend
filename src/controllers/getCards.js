@@ -1,12 +1,9 @@
-import CardSchema from '../services/db/models/CardSchema';
+import {OAuth2Client} from 'google-auth-library';
+import url from 'url';
+import keys from '../credentials.json';
 
 async function getCards(req, res) {
-    try {
-        const cards = await CardSchema.find();
-        res.json(cards);
-    } catch (error) {
-        res.status(500).json(error);
-    }
+    res.json({message: "cards"});
 }
 
 export default getCards;
