@@ -19,9 +19,6 @@ app.use(express.static(path.join(__dirname, './views')));
 
 // Routes
 
-import googleAuth from './routes/googleAuth';
-app.use("/api/auth/google/signin", googleAuth);
-
 import signUp from './routes/signUp';
 app.use("/signUp", signUp);
 
@@ -33,5 +30,8 @@ app.use("/login", login);
 
 import user from './routes/user';
 app.use("/api/user", user);
+
+import googleAuth from './routes/googleAuth';
+app.use("/api/auth/google/signin", googleAuth);
 
 export default app;

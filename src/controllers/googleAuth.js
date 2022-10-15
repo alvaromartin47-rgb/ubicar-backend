@@ -1,7 +1,11 @@
-import Google from './entities/Google';
+import GoogleManager from './entities/GoogleManager';
 
 async function googleAuth(req, res) {
-    const url = Google.getUrlLogin();
+    const scope = [
+        'https://www.googleapis.com/auth/userinfo.email',
+        "https://www.googleapis.com/auth/userinfo.profile"
+    ];
+    const url = GoogleManager.getUrlLogin(scope);
 
     res.redirect(url);
 }

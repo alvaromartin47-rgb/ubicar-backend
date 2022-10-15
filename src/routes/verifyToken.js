@@ -1,7 +1,7 @@
 import Token from "../controllers/entities/Token";
 
 const verifyToken = async (req, res, next) => {
-    const token = req.headers['authorization'];
+    const token = req.headers['authorization'].split(' ')[1];
 
     try {
         const { userId } = Token.verify(
@@ -13,7 +13,7 @@ const verifyToken = async (req, res, next) => {
 
         next();
     } catch ({ message }) {
-        return res.status(500).send({message});
+        res.redirect(`${process.env.BACKEND_URI}/api/auth/google/signin`);
     }
 };
 

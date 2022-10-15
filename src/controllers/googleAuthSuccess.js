@@ -1,17 +1,20 @@
-import Google from './entities/Google';
+import Token from "./entities/Token";
+import GoogleManager from './entities/GoogleManager';
+import GoogleUser from "./entities/GoogleUser";
 
 async function googleAuthSuccess(req, res) {
     const code = req.query.code;
 
-    const oAuth2Client = Google.generateOAuthClient();
+    const googleManager = await GoogleManager.create(code);
+    const profileData = await googleManager.getProfile();
     
-    const token = await oAuth2Client.getToken(code);
-    
-    // Generar JWT
+    profileData.googleCode = code;
 
-    res.redirect(
-        `https://ubicar-web.vercel.app?token=${JSON.stringify(token.tokens)}`
-    );
+    const userId = await GoogleUser.saveInDB(profileData);
+    
+    const token = Token.generate({userId}, '1h', process.env.PRIVATE_PWD);
+
+    res.redirect(`${process.env.FRONTEND_URI}?token=${token}`);
 }
 
 export default googleAuthSuccess;
