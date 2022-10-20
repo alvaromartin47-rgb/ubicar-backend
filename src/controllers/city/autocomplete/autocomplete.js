@@ -2,29 +2,24 @@ import axios from 'axios';
 
 async function autocomplete(req, res) {
     const q = req.query.q;
-    console.log(q);
-
-    const resp = await axios.get(
-        `https://api.mymappi.com/v2/places/autocomplete?apikey=${process.env.MY_MAPPI_TOKEN}&q=${q}`
-    )
     
-    const cities = [];
-
-    for (let c of resp.data.data) {
-        if (c.layer != "county") continue;
-
-        const data = {};
-        data.id = c.autocomplete_id;
-        data.name = c.display_name;
-        data.short_name = c.display_name;
-        data.full_name = c.display_name;
-        data.lat = -35.8261347;
-        data.lon = -61.9287713;
-
-        cities.push(data);
-    }
+    const url = "https://apis.datos.gob.ar/georef/api/localidades";
+    const params = `nombre=${q}&campos=centroide,provincia`;
     
-    res.json(cities);
+    const resp = await axios.get(`${url}?${params}`);
+    
+    res.json(resp.data.localidades.map((l, i) => {
+        // if (l.nombre.startsWith(q.toUpperCase())) si 
+        // queremos que solo devuelva las que comienzan
+        // con ese nombre.
+
+        return {
+            id: l.id,
+            name: `${l.nombre}, ${l.provincia.nombre}, Argentina`,
+            lat: l.centroide.lat,
+            lon: l.centroide.lon
+        }
+    }));
 }
 
 export default autocomplete;

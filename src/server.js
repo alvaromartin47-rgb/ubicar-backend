@@ -11,7 +11,7 @@ const app = express();
 app.use(helmet());
 app.disable('x-powered-by');
 
-app.use(cors());
+app.use(cors({"origin": "*"}));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 

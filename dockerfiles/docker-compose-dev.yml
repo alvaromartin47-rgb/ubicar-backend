@@ -23,14 +23,14 @@ services:
         volumes:
             - ../:/usr/src/app/
 
-    local_tunnel_api:
-        container_name: ubicar_local_tunel_api
-        build:
-            context: ../
-            dockerfile: dockerfiles/localtunnel.dockerfile
-        image: sv-localtunnel
-        links:
-            - ubicar_api_dev
-        depends_on: 
-            - ubicar_api_dev
-        command: "lt -p 4000 -l ubicar_api_dev -s ubicar-api-dev"
+    # local_tunnel_api:
+    #     container_name: ubicar_local_tunel_api
+    #     build:
+    #         context: ../
+    #         dockerfile: dockerfiles/localtunnel.dockerfile
+    #     image: sv-localtunnel
+    #     links:
+    #         - ubicar_api_dev
+    #     depends_on: 
+    #         - ubicar_api_dev
+    #     command: "lt -p 4000 -l ubicar_api_dev -s ubicar-api-dev"
