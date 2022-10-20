@@ -1,19 +1,11 @@
 import axios from 'axios';
 
 async function getCards(req, res) {
-    // const resp = await axios.get(
-    //     `https://api.mymappi.com/v2/directions/route/car?apikey=${process.env.MY_MAPPI_TOKEN}&orig=-35.8096888,-61.9010052&dest=bragado`
-    // );
-    
     const resp = await axios.get(
-        `https://api.mymappi.com/v2/places/autocomplete?apikey=${process.env.MY_MAPPI_TOKEN}&q="9 de"`
-    )
+        `https://api.mymappi.com/v2/directions/route/car?apikey=${process.env.MY_MAPPI_TOKEN}&orig=${req.query.orig}&dest=${req.query.dest}`
+    );
     
-    for (let c of resp.data.data) {
-        if (c.layer == "county") console.log(c.display_name);
-    }
-    
-    res.json(resp.data);
+    res.json({distance: `${resp.data.data.routes[0].distance / 1000}km`});
 }
 
 export default getCards;

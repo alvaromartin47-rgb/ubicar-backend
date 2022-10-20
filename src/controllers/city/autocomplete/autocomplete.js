@@ -8,18 +8,24 @@ async function autocomplete(req, res) {
     
     const resp = await axios.get(`${url}?${params}`);
     
-    res.json(resp.data.localidades.map((l, i) => {
-        // if (l.nombre.startsWith(q.toUpperCase())) si 
-        // queremos que solo devuelva las que comienzan
-        // con ese nombre.
+    const cities = [];
 
-        return {
+    // if (l.nombre.startsWith(q.toUpperCase())) si 
+    // queremos que solo devuelva las que comienzan
+    // con ese nombre. O includes() las que contengan.
+
+    for (let l of resp.data.localidades) {
+        if (!l.nombre.includes(q.toUpperCase())) continue;
+
+        cities.push({
             id: l.id,
             name: `${l.nombre}, ${l.provincia.nombre}, Argentina`,
             lat: l.centroide.lat,
             lon: l.centroide.lon
-        }
-    }));
+        });
+    }
+
+    res.json(cities);
 }
 
 export default autocomplete;

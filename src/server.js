@@ -30,6 +30,9 @@ app.use("/api/trip", trip);
 import city from './routes/city';
 app.use("/api/city", city);
 
+import cities from './routes/cities';
+app.use("/api/cities", cities);
+
 import googleAuth from './routes/googleAuth';
 app.use("/api/auth/google/signin", googleAuth);
 

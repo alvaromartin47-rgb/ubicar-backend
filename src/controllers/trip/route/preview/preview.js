@@ -1,5 +1,55 @@
+import City from "../../../entities/City";
+
 async function preview(req, res) {
-    res.json({message: "Hello world!"});
+    const { datetime, nodes } = req.body;
+
+    const origCityId = nodes[0]?.cityId;
+    if(!origCityId) res.json({error: "Origin not provided"});
+    
+    const origCity = await City.create(origCityId);
+
+    const response = {
+        nodes: [{
+            city: origCity.getInfo(),
+            datetime,
+            distance: 0
+        }],
+        distance: 0,
+        duration: 0,
+        iniDatetime: datetime,
+        endDatetime: datetime
+    }
+
+    let totalDistance = 0;
+    let totalDuration = 0;
+    for (let i=0; i < nodes.length; i++) {
+        if (i + 1 == nodes.length) break;
+
+        const orig = nodes[i].cityId;
+        const dest = nodes[i + 1].cityId;
+        const cityOrig = await City.create(orig);
+        const cityDest = await City.create(dest);
+
+        const {
+            distance,
+            duration
+        } = await cityOrig.getDistanceAndDurationTo(cityDest);
+        
+        totalDistance += distance;
+        totalDuration += duration;
+
+        response.nodes.push({
+            city: cityDest.getInfo(),
+            datetime: 0,
+            distance,
+            duration
+        });
+    }
+
+    response.distance = totalDistance;
+    response.duration = totalDuration;
+
+    res.json(response);
 }
 
 export default preview;

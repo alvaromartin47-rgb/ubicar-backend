@@ -2,8 +2,8 @@ import express from 'express';
 const router = express.Router();
 
 import verifyToken from './verifyToken';
-import autocomplete from '../controllers/city/autocomplete/autocomplete';
+import id from '../controllers/cities/id';
 
-router.get("/autocomplete/", autocomplete);
+router.get("/:id/", id);
 
 export default router;
