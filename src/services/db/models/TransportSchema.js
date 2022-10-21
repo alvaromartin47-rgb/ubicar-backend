@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const transportSchema = new Schema({
+    transportId: { type: String },
+    userId: { type: String },
     name: { type: String },
     type: { type: String },
     patent: { type: String },

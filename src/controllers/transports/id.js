@@ -10,11 +10,11 @@ async function id(req, res) {
     // });
 
     // if (!data) res.status(400).send(
-    //     "EL transporte ya existe en el sistema"
+    //     "El transporte ya existe en el sistema"
     // );
 
     req.body.userId = req.userId;
-    req.body._id = mongoose.Types.ObjectId(transportId)
+    req.transportId = transportId;
     
     const newTransport = new TransportSchema(req.body);
     await newTransport.save();
