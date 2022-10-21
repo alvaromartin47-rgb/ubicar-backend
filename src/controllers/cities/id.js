@@ -1,4 +1,3 @@
-import axios from 'axios';
 import City from "../entities/City";
 
 async function id(req, res) {

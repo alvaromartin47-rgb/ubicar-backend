@@ -33,6 +33,12 @@ app.use("/api/city", city);
 import cities from './routes/cities';
 app.use("/api/cities", cities);
 
+import transports from './routes/transports';
+app.use("/api/transports", transports);
+
+import driver from './routes/driver';
+app.use("/api/driver", driver);
+
 import googleAuth from './routes/googleAuth';
 app.use("/api/auth/google/signin", googleAuth);
 

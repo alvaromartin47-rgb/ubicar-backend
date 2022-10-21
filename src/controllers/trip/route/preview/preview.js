@@ -3,10 +3,11 @@ import City from "../../../entities/City";
 async function preview(req, res) {
     const { datetime, nodes } = req.body;
 
-    const origCityId = nodes[0]?.cityId;
-    if(!origCityId) res.json({error: "Origin not provided"});
+    if(nodes.length < 2) res.json({
+        error: "Se necesita origen y destino"
+    });
     
-    const origCity = await City.create(origCityId);
+    const origCity = await City.create(nodes[0]);
 
     const response = {
         nodes: [{
