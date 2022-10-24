@@ -19,7 +19,7 @@ async function id(req, res) {
     const newTransport = new TransportSchema(req.body);
     await newTransport.save();
     
-    res.json({message: "ok"});
+    res.status(201).end();
 }
 
 export default id;
