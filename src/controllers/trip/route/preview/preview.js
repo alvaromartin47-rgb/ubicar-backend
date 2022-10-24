@@ -7,7 +7,7 @@ async function preview(req, res) {
         error: "Se necesita origen y destino"
     });
     
-    const origCity = await City.create(nodes[0]);
+    const origCity = await City.create(nodes[0].cityId);
 
     const response = {
         nodes: [{
