@@ -14,7 +14,7 @@ async function id(req, res) {
     // );
 
     req.body.userId = req.userId;
-    req.transportId = transportId;
+    req.body.transportId = transportId;
     
     const newTransport = new TransportSchema(req.body);
     await newTransport.save();
