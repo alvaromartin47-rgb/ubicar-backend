@@ -6,51 +6,20 @@ async function preview(req, res) {
     if(nodes.length < 2) res.json({
         error: "Se necesita origen y destino"
     });
+
+    const ult = nodes.length - 1;
+    const nodeOrig = await City.create(nodes[0].cityId);
+    const nodeDest = await City.create(nodes[ult].cityId);
     
-    const origCity = await City.create(nodes[0].cityId);
+    const nodesCopy = nodes.slice()
+    nodesCopy.shift();
+    nodesCopy.pop();
+    
+    const cityNodes = await Promise.all(
+        nodesCopy.map(async (c) => await City.create(c.cityId)
+    ));
 
-    const response = {
-        nodes: [{
-            city: origCity.getInfo(),
-            datetime,
-            distance: 0
-        }],
-        distance: 0,
-        duration: 0,
-        iniDatetime: datetime,
-        endDatetime: datetime
-    }
-
-    let totalDistance = 0;
-    let totalDuration = 0;
-    for (let i=0; i < nodes.length; i++) {
-        if (i + 1 == nodes.length) break;
-
-        const orig = nodes[i].cityId;
-        const dest = nodes[i + 1].cityId;
-        const cityOrig = await City.create(orig);
-        const cityDest = await City.create(dest);
-
-        const {
-            distance,
-            duration
-        } = await cityOrig.getDistanceAndDurationTo(cityDest);
-        
-        totalDistance += distance;
-        totalDuration += duration;
-
-        response.nodes.push({
-            city: cityDest.getInfo(),
-            datetime: 0,
-            distance,
-            duration
-        });
-    }
-
-    response.distance = totalDistance;
-    response.duration = totalDuration;
-
-    res.json(response);
+    res.json(await nodeOrig.getRouteTo(nodeDest, cityNodes));
 }
 
 export default preview;
