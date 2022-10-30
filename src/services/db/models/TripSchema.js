@@ -16,10 +16,20 @@ const passengers = new Schema({
 const tripSchema = new Schema({
     tripId: { type: String },
     datetime: { type: Number },
+    date: { type: String },
     routeNodes: [ routeNode ],
+    fromCityId: { type: String },
+    toCityId: { type: String },
     transportId: { type: String },
     passengers: passengers,
     cost: { type: Number }
-});
+}, {
+    toJSON: {
+        transform: function (doc, ret) {
+            ret.id = ret._id;
+            delete ret._id;
+            delete ret.__v;
+    }
+}});
 
 module.exports = mongoose.model('TripSchema', tripSchema);
