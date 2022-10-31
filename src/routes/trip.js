@@ -8,6 +8,6 @@ import id from '../controllers/trip/id';
 
 router.post("/route/preview/", preview);
 router.post("/check/:id/", check);
-router.put("/:id/", id);
+router.put("/:id/", verifyToken, id);
 
 export default router;

@@ -22,7 +22,7 @@ function getEpochRange(date, difEpochZone) {
 
 export default async function search(req, res) {    
     const filtredEntryBody = Object.entries(req.body)
-    .filter(([key, value]) => value !== null);
+    .filter(([key, value]) => !!value);
     const filtredBody = Object.fromEntries(filtredEntryBody); 
 
     // Filter per timezone
@@ -44,6 +44,7 @@ export default async function search(req, res) {
     let objSort = {};
     if (orderAsc && orderBy) objSort[orderBy] = 1;
 
+	console.log(filtredBody);
     
     const data = await TripSchema.find(filtredBody)
     .sort(objSort)
