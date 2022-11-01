@@ -6,6 +6,7 @@ import cities from './routes/cities';
 import transports from './routes/transports';
 import driver from './routes/driver';
 import googleAuth from './routes/googleAuth';
+import payment from './routes/payment';
 
 export default function routes(app) {
     app.use("/api/user", user);
@@ -16,6 +17,7 @@ export default function routes(app) {
     app.use("/api/transports", transports);
     app.use("/api/driver", driver);
     app.use("/api/auth/google/signin", googleAuth);
+    app.use("/api/payment", payment);
 
     // Test
 
