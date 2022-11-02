@@ -52,7 +52,6 @@ export default class Route {
             distance: trip[trip.length - 1].distance / 1000
         });
 
-        console.log(this.info.data);
         return { 
             nodes,
             distance: this.info.data.routes[0].distance / 1000,
