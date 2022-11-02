@@ -1,4 +1,4 @@
-import GoogleManager from './entities/GoogleManager';
+import GoogleManager from '../../../entities/GoogleManager';
 
 async function googleAuth(req, res) {
     const scope = [
