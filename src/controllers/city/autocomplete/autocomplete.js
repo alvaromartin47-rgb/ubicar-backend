@@ -3,7 +3,7 @@ import axios from 'axios';
 async function autocomplete(req, res) {
     const q = req.query.q;
     
-    const url = "https://apis.datos.gob.ar/georef/api/localidades";
+    const url = "http://apis.datos.gob.ar/georef/api/localidades";
     const params = `nombre=${q}&campos=centroide,provincia`;
     
     const resp = await axios.get(`${url}?${params}`);

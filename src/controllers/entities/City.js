@@ -8,7 +8,7 @@ export default class City {
     }
 
     static async create(cityId) {
-        const url = "https://apis.datos.gob.ar/georef/api/localidades";
+        const url = "http://apis.datos.gob.ar/georef/api/localidades";
         const params = `id=${cityId}&campos=centroide,provincia`;
         
         const info = await axios.get(`${url}?${params}`);
