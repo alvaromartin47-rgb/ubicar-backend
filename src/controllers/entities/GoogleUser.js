@@ -22,7 +22,7 @@ export default class GoogleUser {
             throw new Error("Email is required");
         }
 
-        const data = await UserSchema.findOne({ 
+        let data = await UserSchema.findOne({ 
             email: user.email
         });
 
