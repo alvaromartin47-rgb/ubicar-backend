@@ -17,5 +17,5 @@ docker run -it --name test-container --network dockerfiles_default --link ubicar
 echo "Tests finalizados."
 
 # Limpieza conteiners e imagenes
-docker rm test-container database ubicar_api_dev -f
+# docker rm test-container database ubicar_api_dev -f
 docker rmi $(docker images | tail -n +2 | awk '$1 == "<none>" {print $'3'}')

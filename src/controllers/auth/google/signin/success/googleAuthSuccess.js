@@ -1,4 +1,4 @@
-import Token from "../../../../entities";
+import Token from "../../../../entities/Token";
 import GoogleManager from '../../../../entities/GoogleManager';
 import GoogleUser from "../../../../entities/GoogleUser";
 

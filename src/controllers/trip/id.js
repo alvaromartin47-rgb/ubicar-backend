@@ -36,12 +36,9 @@ async function id(req, res) {
     req.body.driver = {
         displayName: `${data.name} ${data.lastname}`,
         image: data.image,
-        travels: 10,
-        rating: {
-            quantity: 15,
-            average: 5
-        },
-        verification: true
+        travels: data.travels,
+        rating: data.rating,
+        verification: data.dniVerification
     }
 
     const newTrip = new TripSchema(req.body);

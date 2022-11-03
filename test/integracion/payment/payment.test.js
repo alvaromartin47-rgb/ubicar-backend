@@ -1,3 +1,4 @@
+import mercadopago from 'mercadopago';
 import request from 'supertest';
 const baseURL = "http://ubicar_api_dev:4000";
 
@@ -55,7 +56,7 @@ describe("POST /api/payment/reserve/", () => {
         .post(`/api/payment/reserve/${tripId}`)
         .send(reservePaymentBody)
         .set('authorization', `Bearer ${accessToken2}`)
-
+        
         expect(resNewReserveMP.statusCode).toBe(200);
     });
 });

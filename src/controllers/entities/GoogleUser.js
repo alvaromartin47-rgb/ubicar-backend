@@ -26,11 +26,14 @@ export default class GoogleUser {
             email: user.email
         });
 
-        if (data) return data._id;
-
-        const newUser = new UserSchema(user);
-        const saved = await newUser.save();
-        return saved._id;
+        if (data) {
+            await UserSchema.findByIdAndUpdate(data.id, user);
+        } else {
+            const newUser = new UserSchema(user);
+            data = await newUser.save();
+        }
+        
+        return data.id;
     }
 
 }

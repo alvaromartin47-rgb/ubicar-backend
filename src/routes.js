@@ -1,4 +1,3 @@
-import user from './routes/user';
 import trip from './routes/trip';
 import trips from './routes/trips';
 import city from './routes/city';
@@ -7,6 +6,7 @@ import transports from './routes/transports';
 import driver from './routes/driver';
 import auth from './routes/auth';
 import payment from './routes/payment';
+import user from './routes/user';
 
 export default function routes(app) {
     app.use("/api/auth", auth);

@@ -23,7 +23,6 @@ export default class GoogleManager {
         oAuth2Client.setCredentials(res.tokens);
 
         return new GoogleManager(oAuth2Client);
-
     }
 
     static getUrlLogin(scope) {

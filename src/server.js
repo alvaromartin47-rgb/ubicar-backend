@@ -4,6 +4,7 @@ import cors from 'cors';
 import path from 'path';
 import helmet from 'helmet';
 import routes from "./routes";
+import catchErrors from "./middlewere";
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use(
         path.join(
             __dirname, './views'
 )));
+
+app.use(catchErrors);
 
 routes(app);
 

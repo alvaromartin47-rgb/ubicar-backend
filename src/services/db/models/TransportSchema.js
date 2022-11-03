@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { replace_id } from './functions';
 
 const { Schema } = mongoose;
 
@@ -20,12 +21,7 @@ const transportSchema = new Schema({
     sealBelt: { type: Boolean },
     airbag: { type: Boolean }
 }, {
-    toJSON: {
-        transform: function (doc, ret) {
-            ret.id = ret._id;
-            delete ret._id;
-            delete ret.__v;
-    }
-}});
+    toJSON: {transform: replace_id}
+});
 
 module.exports = mongoose.model('TransportSchema', transportSchema);

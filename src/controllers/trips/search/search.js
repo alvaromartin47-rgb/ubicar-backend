@@ -43,12 +43,17 @@ export default async function search(req, res) {
     const { orderBy, orderAsc } = filtredBody;
     let objSort = {};
     if (orderAsc && orderBy) objSort[orderBy] = 1;
-
-	console.log(filtredBody);
     
     const data = await TripSchema.find(filtredBody)
     .sort(objSort)
     .limit(filtredBody.limit || 15)
 
-    res.json(data.slice(filtredBody.skip || 0));
+    const trips = data.slice(filtredBody.skip || 0);
+
+    res.json({
+        trips,
+        skip: filtredBody.skip || 0,
+        limit: filtredBody.limit || 15,
+        total: trips.length 
+    });
 }
