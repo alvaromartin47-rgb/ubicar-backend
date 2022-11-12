@@ -8,6 +8,8 @@ const reserveSchema = new Schema({
     driverId: { type: String },
     travelerId: { type: String },
     status: { type: String, default: "pending" }
-}, { _id: false });
+}, {
+    toJSON: {transform: replace_id}
+});
 
 module.exports = mongoose.model('ReserveSchema', reserveSchema);

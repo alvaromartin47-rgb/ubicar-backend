@@ -6,6 +6,14 @@ import User from './User';
 
 export default class Reserve {
 
+    constructor(reserve) {
+        this.id = reserve.id;
+        this.tripId = reserve.tripId;
+        this.travelerId = reserve.travelerId;
+        this.driverId = reserve.driverId;
+        this.status = reserve.status;
+    }
+
     static async create(trip, userId) {
         const { name, lastname } = await UserSchema.findById(userId);
         const isExistentReserve = await ReserveSchema.find({
@@ -44,7 +52,38 @@ export default class Reserve {
             html: `<h4>${message}</h4>`
         });
 
-        return { status: reserve.status, status_code: 200 };
+        return { 
+            id: reserve.id,
+            status: reserve.status,
+            status_code: 200
+        };
+    }
+
+    static async instanceWith(reservationId) {
+        try {
+            const reserve = await ReserveSchema.findById(reservationId);
+            if (!reserve) throw Error();
+            return new Reserve(reserve);
+        } catch(err) {
+            throw new Error(Messages.ERROR_RESERVE_NOT_EXIST());
+        }
+
+    }
+
+    canPay() {
+        return this.status === "accepted";
+    }
+
+    async accept() {
+        if (this.status == "accepted") {
+            throw new Error(Messages.ERROR_RESERVATION_WAS_ALREADY_ACCEPT());
+        }
+
+        const update = { status: "accepted" };
+        await ReserveSchema.findByIdAndUpdate(this.id, update);
+        
+        update.status_code = 200;
+        return update;
     }
 
 }

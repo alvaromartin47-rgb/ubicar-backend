@@ -6,7 +6,7 @@ const { Schema } = mongoose;
 const notification = new Schema({
     message: { type: String },
     image: { type: String }
-});
+}, { _id : false });
 
 const notifications = new Schema({
     quantity: { type: Number, default: 0 },

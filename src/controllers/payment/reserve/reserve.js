@@ -1,6 +1,6 @@
 import mercadopago from 'mercadopago';
 import TripSchema from '../../../services/db/models/TripSchema';
-import ReserveSchema from '../../../services/db/models/ReserveSchema';
+import Reserve from '../../entities/Reserve';
 import Messages from '../../entities/Messages';
 
 async function reserve(req, res) {
@@ -11,16 +11,14 @@ async function reserve(req, res) {
         message: "Trip not found"
     });
 
-    const { status } = await ReserveSchema.find({
-        tripId,
-        travelerId: req.userId
-    });
-
-    if (!status || status === "pending") {
-        return res.status(400).json({
-            message: Messages.ERROR_PAYMENT_RESERVE_PENDING,
-            status_code: 400
-        });
+    try {
+        const iReserve = await Reserve.instanceWith(tripId, req.userId);
+        if (!iReserve.canPay()) {
+            throw new Error(Messages.ERROR_PAYMENT_RESERVE_PENDING)
+        }
+    } catch(err) {
+        const resJson = { message: err.message, status_code: 400 }
+        return res.status(resJson.status_code).json(resJson);
     }
     
     req.body.capture = false;

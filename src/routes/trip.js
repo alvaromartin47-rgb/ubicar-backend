@@ -11,7 +11,7 @@ import accept from '../controllers/trip/accept/accept';
 router.post("/route/preview/", preview);
 router.post("/check/:id/", check);
 router.put("/:id/", verifyToken, id);
-router.put("/reserve/:id", verifyToken, reserve);
-router.put("/accept/:id", accept);
+router.put("/reserve/:tripId", verifyToken, reserve);
+router.put("/accept/:reservationId", accept);
 
 export default router;

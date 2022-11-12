@@ -2,7 +2,7 @@ import TripSchema from '../../../services/db/models/TripSchema';
 import Reserve from '../../entities/Reserve';
 
 export default async function reserve(req, res) {
-    const tripId = req.params.id;
+    const tripId = req.params.tripId;
 
     const trip = await TripSchema.findOne({ tripId });
     if (!trip) return res.status(404).json({

@@ -8,4 +8,11 @@ export default class Messages {
         return "Before making the payment, the driver must accept your reservation"
     }
 
+    static ERROR_RESERVE_NOT_EXIST() {
+        return "The reservation does not exist";
+    }
+
+    static ERROR_RESERVATION_WAS_ALREADY_ACCEPT() {
+        return "Reservation was alredy accept";
+    }
 }
