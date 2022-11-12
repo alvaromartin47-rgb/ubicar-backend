@@ -12,6 +12,7 @@ async function id(req, res) {
     req.body.fromCityId = req.body.routeNodes[0].cityId;
     req.body.toCityId = req.body.routeNodes[len - 1].cityId;
     req.body.date = new Date(req.body.datetime);
+    req.body.passengers.avaiable = req.body.passengers.count;
 
     // set route (Idem Preview, refactorizar)
 
@@ -34,6 +35,7 @@ async function id(req, res) {
 
     const data = await UserSchema.findById(req.userId);
     req.body.driver = {
+        id: req.userId,
         displayName: `${data.name} ${data.lastname}`,
         image: data.image,
         travels: data.travels,

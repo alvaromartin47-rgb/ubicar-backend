@@ -4,7 +4,7 @@ import cors from 'cors';
 import path from 'path';
 import helmet from 'helmet';
 import routes from "./routes";
-import catchErrors from "./middlewere";
+import dotenv from 'dotenv';
 
 const app = express();
 
@@ -24,7 +24,7 @@ app.use(
             __dirname, './views'
 )));
 
-app.use(catchErrors);
+process.env.PORT || dotenv.config();
 
 routes(app);
 

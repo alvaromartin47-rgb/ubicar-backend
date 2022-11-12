@@ -5,7 +5,6 @@ export default class GoogleUser {
     constructor(body) {
         this.userId = body.userId;
         this.email = body.email;
-        this.pwd_hash = body.password;
     }
 
     static async create(email) {

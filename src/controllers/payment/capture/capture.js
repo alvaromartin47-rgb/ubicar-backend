@@ -13,8 +13,7 @@ async function capture(req, res) {
     //     return value.status_detail === "pending_capture";
     // });
     // const [ paymentId ] = Object.fromEntries(filtred).keys();
-
-    const paymentId = 1309044390;
+    
     const data = (await mercadopago.payment.capture(
         paymentId,
         mercadopago

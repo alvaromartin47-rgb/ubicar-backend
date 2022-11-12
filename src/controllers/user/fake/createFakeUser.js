@@ -8,7 +8,7 @@ async function createFakeUser(req, res) {
     const accessToken = Token.generate(
         {userId: _id},
         "10m",
-        process.env.PRIVATE_PWD_TEST
+        process.env.PRIVATE_PWD
     );
 
     res.json({accessToken});

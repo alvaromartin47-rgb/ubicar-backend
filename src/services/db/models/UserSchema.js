@@ -3,6 +3,16 @@ import { replace_id } from './functions';
 
 const { Schema } = mongoose;
 
+const notification = new Schema({
+    message: { type: String },
+    image: { type: String }
+});
+
+const notifications = new Schema({
+    quantity: { type: Number, default: 0 },
+    notifications: [ notification ]
+}, { _id : false });
+
 const rating = new Schema({
     quantity: { type: Number, default: 0 },
     average: { type: Number, default: 0 }
@@ -18,6 +28,7 @@ const userSchema = new Schema({
     },
     image: { type: String },
     googleCode: { type: String },
+    notifications: [ notifications ],
     aboutMe: { type: String },
     birthday: { type: String },
     dni: { type: Number },

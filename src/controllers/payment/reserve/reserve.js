@@ -38,7 +38,12 @@ async function reserve(req, res) {
 
     await TripSchema.updateOne(
         {tripId},
-        {payment: paymentObj.payment}
+        {
+            payment: paymentObj.payment,
+            passengers: {
+                avaiable: isTrip.passengers.avaiable - 1
+            }
+        }
     )
 
     res.json({

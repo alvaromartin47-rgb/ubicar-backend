@@ -57,6 +57,7 @@ const rating = new Schema({
 }, { _id : false });
 
 const driver = new Schema({
+    id: { type: String },
     displayName: { type: String },
     image: { type: String },
     travels: { type: Number },
@@ -87,7 +88,8 @@ const passengers = new Schema({
     smoking: { type: Boolean },
     pets: { type: Boolean },
     extraSpace: { type: String },
-    cost: { type: Number }
+    cost: { type: Number },
+    avaiable: { type: Number }
 }, { _id : false });
 
 const tripSchema = new Schema({
