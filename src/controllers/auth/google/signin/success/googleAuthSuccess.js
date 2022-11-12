@@ -9,6 +9,7 @@ async function googleAuthSuccess(req, res) {
     const profileData = await googleManager.getProfile();
     
     profileData.googleCode = code;
+    profileData.notifications = {quantity: 0, notifications: []};
 
     const userId = await GoogleUser.saveInDB(profileData);
     

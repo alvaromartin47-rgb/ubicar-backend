@@ -20,6 +20,7 @@ export default class User {
 
     async notify(notification) {
         const update = this.data.notifications;
+
         update.quantity = update.quantity + 1;
         update.notifications.push(notification);
 
@@ -28,8 +29,8 @@ export default class User {
 
         const emailer = new Emailer(this.email, subject, html);
         await emailer.send();
-        
-        await UserSchema.findByIdAndUpdate(this.id, update);
+
+        await UserSchema.findByIdAndUpdate(this.id, {notifications: update});
     }
 
 }

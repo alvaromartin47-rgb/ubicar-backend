@@ -28,7 +28,7 @@ const userSchema = new Schema({
     },
     image: { type: String },
     googleCode: { type: String },
-    notifications: [ notifications ],
+    notifications: notifications,
     aboutMe: { type: String },
     birthday: { type: String },
     dni: { type: Number },

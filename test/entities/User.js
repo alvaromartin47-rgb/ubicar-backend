@@ -12,7 +12,7 @@ export default class User {
         const response = await request(app)
         .post("/api/user/fake")
         .send({ email });
-
+        
         return new User(app, response.body);
     }
 

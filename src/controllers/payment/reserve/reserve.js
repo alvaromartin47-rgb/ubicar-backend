@@ -1,11 +1,27 @@
 import mercadopago from 'mercadopago';
 import TripSchema from '../../../services/db/models/TripSchema';
+import ReserveSchema from '../../../services/db/models/ReserveSchema';
+import Messages from '../../entities/Messages';
 
 async function reserve(req, res) {
     const tripId = req.params.tripId;
     const isTrip = await TripSchema.findOne({tripId});
 
-    if (!isTrip) res.status(404).send("El viaje no se encontró");
+    if (!isTrip) return res.status(404).json({
+        message: "Trip not found"
+    });
+
+    const { status } = await ReserveSchema.find({
+        tripId,
+        travelerId: req.userId
+    });
+
+    if (!status || status === "pending") {
+        return res.status(400).json({
+            message: Messages.ERROR_PAYMENT_RESERVE_PENDING,
+            status_code: 400
+        });
+    }
     
     req.body.capture = false;
     mercadopago.configurations.setAccessToken(
