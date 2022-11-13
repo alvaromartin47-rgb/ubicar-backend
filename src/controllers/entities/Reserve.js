@@ -36,7 +36,7 @@ export default class Reserve {
 
         const accessToken = Token.generate(
             { reservationId: id, userId: trip.driver.id },
-            60,
+            process.env.TIME_DRIVER_ACCEPT_RESERVATION,
             process.env.PRIVATE_PWD_RESERVATION
         );
 

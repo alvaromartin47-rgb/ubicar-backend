@@ -28,7 +28,7 @@ services:
         build:
             context: ../
             dockerfile: dockerfiles/checkExpiration.dockerfile
-        image: check-expiration
+        image: ubicar-check-expiration
         links:
             - db
         depends_on:
