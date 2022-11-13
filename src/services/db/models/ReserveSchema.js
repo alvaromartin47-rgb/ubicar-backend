@@ -8,7 +8,7 @@ const reserveSchema = new Schema({
     driverId: { type: String },
     travelerId: { type: String },
     status: { type: String, default: "pending" },
-    accessToken: { type: String }
+    access_token: { type: String }
 }, {
     toJSON: {transform: replace_id}
 });
