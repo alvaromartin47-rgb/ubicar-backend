@@ -23,6 +23,18 @@ services:
         volumes:
             - ../:/usr/src/app/
 
+    check_expiration:
+        container_name: check_expiration
+        build:
+            context: ../
+            dockerfile: dockerfiles/checkExpiration.dockerfile
+        image: check-expiration
+        links:
+            - db
+        depends_on:
+            - db
+        restart: always
+
     # local_tunnel_api:
     #     container_name: ubicar_local_tunel_api
     #     build:

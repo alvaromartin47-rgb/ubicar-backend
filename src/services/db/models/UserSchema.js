@@ -10,6 +10,7 @@ const notification = new Schema({
 
 const notifications = new Schema({
     quantity: { type: Number, default: 0 },
+    accessToken: { type: String },
     notifications: [ notification ]
 }, { _id : false });
 

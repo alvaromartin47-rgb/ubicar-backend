@@ -2,6 +2,7 @@ import ReserveSchema from '../../services/db/models/ReserveSchema';
 import UserSchema from '../../services/db/models/UserSchema';
 import Messages from './Messages';
 import User from './User';
+import Token from './Token';
 
 
 export default class Reserve {
@@ -31,8 +32,15 @@ export default class Reserve {
             driverId: trip.driver.id,
             travelerId: userId
         });
+        const { id, status } = await newReserve.save();
 
-        const reserve = await newReserve.save();
+        const accessToken = Token.generate(
+            { reservationId: id, userId: trip.driver.id },
+            60,
+            process.env.PRIVATE_PWD_RESERVATION
+        );
+
+        await ReserveSchema.findByIdAndUpdate(id, {accessToken});
 
         const l = trip.route.nodes.length;
         const from = trip.route.nodes[0].city.name;
@@ -49,13 +57,14 @@ export default class Reserve {
             message,
             image: '' ,
             subject: '¡Tienes una nueva reserva!',
-            html: `<h4>${message}</h4>`
+            html: `<h4>${message}</h4>`,
+            accessToken
         });
 
         return { 
-            id: reserve.id,
-            status: reserve.status,
-            status_code: 200
+            status,
+            status_code: 200,
+            accessToken
         };
     }
 

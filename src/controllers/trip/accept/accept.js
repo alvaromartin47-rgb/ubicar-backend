@@ -1,7 +1,7 @@
 import Reserve from '../../entities/Reserve';
 
 async function accept(req, res) {
-    const reservationId = req.params.reservationId;
+    const reservationId = req.reservationId;
 
     try {
         const iReserve = await Reserve.instanceWith(reservationId);
