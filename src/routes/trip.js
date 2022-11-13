@@ -2,7 +2,6 @@ import express from 'express';
 const router = express.Router();
 
 import verifyToken from './verifyToken';
-import verifyTokenReservation from './verifyTokenReservation';
 import preview from '../controllers/trip/route/preview/preview';
 import check from '../controllers/trip/check/check';
 import id from '../controllers/trip/id';
@@ -13,6 +12,6 @@ router.post("/route/preview/", preview);
 router.post("/check/:id/", check);
 router.put("/:id/", verifyToken, id);
 router.put("/reservation/create/:tripId", verifyToken, reserve);
-router.put("/reservation/accept/", verifyTokenReservation, accept);
+router.put("/reservation/accept/", verifyToken, accept);
 
 export default router;

@@ -9,6 +9,20 @@ const verifyToken = async (req, res, next) => {
             process.env.PRIVATE_PWD
         );
 
+        if (req.body.reservation_token) {
+            try {
+                const { reservationId } = Token.verify(
+                    token,
+                    process.env.PRIVATE_PWD_RESERVATION
+                );
+                req.reservationId = reservationId;
+            } catch(err) {
+                res.json({
+                    message: "Reservation token expired or invalid"
+                });
+            }
+        }
+
         req.userId = userId;
 
         next();
