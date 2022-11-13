@@ -13,7 +13,10 @@ async function checkExpirationReservations(res) {
     
     for (let r of res) {
         try {
-            await Token.verify(r.accessToken, process.env.PRIVATE_PWD_RESERVATION);
+            await Token.verify(
+                r.access_token,
+                process.env.PRIVATE_PWD_RESERVATION
+            );
         } catch(err) {
             if (r.status === "accepted") break;
             await ReserveSchema.findByIdAndRemove(r.id)

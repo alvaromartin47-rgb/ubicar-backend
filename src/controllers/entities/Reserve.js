@@ -58,13 +58,13 @@ export default class Reserve {
             image: '' ,
             subject: '¡Tienes una nueva reserva!',
             html: `<h4>${message}</h4>`,
-            accessToken
+            access_token: accessToken
         });
 
         return { 
             status,
             status_code: 200,
-            accessToken
+            access_token: accessToken
         };
     }
 

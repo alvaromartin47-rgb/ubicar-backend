@@ -42,15 +42,15 @@ export default async function search(req, res) {
 
     const { orderBy, orderAsc } = filtredBody;
     let objSort = {};
-    if (orderAsc && orderBy) objSort[orderBy] = orderAsc;
-    // else objSort["datetime"] = -1;
+    if (orderAsc && orderBy) objSort[orderBy] = 1;
+    else if (orderBy) objSort[orderBy] = -1;
 
     const { passengers } = filtredBody;
     if (passengers) filtredBody.passengers = { count: passengers }
     
     const data = await TripSchema.find(filtredBody)
-    // .sort(objSort)
-    // .limit(filtredBody.limit || 15);
+    .sort(objSort)
+    .limit(filtredBody.limit || 15);
 
     const trips = data.slice(filtredBody.skip || 0);
 
