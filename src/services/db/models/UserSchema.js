@@ -29,7 +29,7 @@ const userSchema = new Schema({
     },
     image: { type: String },
     googleCode: { type: String },
-    notifications: notifications,
+    notifications: { type: notifications, default: {} },
     aboutMe: { type: String },
     birthday: { type: String },
     dni: { type: Number },
@@ -37,7 +37,7 @@ const userSchema = new Schema({
     mobileVerificated: { type: Boolean, default: false },
     mobile: { type: Number },
     travels: { type: Number, default: 0},
-    rating: rating
+    rating: { type: rating, default: {} }
 }, {
     toJSON: {transform: replace_id}
 });
