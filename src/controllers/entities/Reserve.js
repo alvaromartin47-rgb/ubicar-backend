@@ -40,7 +40,9 @@ export default class Reserve {
             process.env.PRIVATE_PWD_RESERVATION
         );
 
-        await ReserveSchema.findByIdAndUpdate(id, {accessToken});
+        await ReserveSchema.findByIdAndUpdate(id, {
+            access_token: accessToken
+        });
 
         const l = trip.route.nodes.length;
         const from = trip.route.nodes[0].city.name;
@@ -63,8 +65,7 @@ export default class Reserve {
 
         return { 
             status,
-            status_code: 200,
-            access_token: accessToken
+            status_code: 200
         };
     }
 
