@@ -12,7 +12,7 @@ export default class Emailer {
             port: 465,
             auth: {
                 user: process.env.EMAIL_ADDRESS,
-                pass: "tmbchnnvgazyxaah"
+                pass: process.env.EMAIL_PASSWORD
             }
         });
     }
