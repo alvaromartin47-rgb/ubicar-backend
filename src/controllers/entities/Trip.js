@@ -12,17 +12,17 @@ export default class Trip {
     }
 
     static async create(tripId) {
-        const data = await TripSchema.findById(tripId);
+        const data = await TripSchema.findOne({tripId});
         if (!data) throw new Error('Trip not found');
 
         return new Trip(data);
     }
 
-    from() {
+    getFrom() {
         return this.from;
     }
 
-    to() {
+    getTo() {
         return this.to;
     }
 
@@ -31,7 +31,7 @@ export default class Trip {
     }
 
     isDriver(userId) {
-        return userId === this.driver;
+        return userId === this.driverId;
     }
 
 }

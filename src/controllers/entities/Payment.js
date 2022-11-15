@@ -39,7 +39,6 @@ export default class Payment {
             payment_type_id: data.payment_type_id,
             description: data.description,
             payer: {
-                userId: req.userId,
                 first_name: data.payer.first_name,
                 last_name: data.payer.last_name,
                 email: data.payer.email,

@@ -12,9 +12,9 @@ async function reserve(req, res) {
             paymentData
         );
 
-        return res.json({status: reservation.status()})
+        return res.json({status: reservation.getStatus()})
     } catch(err) {
-        const resJson = { message: err.message }
+        const resJson = {message: err.message}
         return res.json(resJson);
     }
 }

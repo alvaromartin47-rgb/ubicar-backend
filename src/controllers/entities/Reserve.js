@@ -33,6 +33,8 @@ export default class Reserve {
         await Reserve.travelerAlreadyBooked(tripId, travelerId);
 
         const paymentReservation = await Payment.reserve(paymentData);
+        paymentReservation.payer.userId = travelerId;
+
         const driverId = trip.getDriverId();
 
         const reservation = new Reserve(await Reserve.saveInDB(
@@ -45,7 +47,7 @@ export default class Reserve {
         return reservation;
     }
 
-    status() {
+    getStatus() {
         return this.status;
     }
     
@@ -53,10 +55,10 @@ export default class Reserve {
         const trip = await Trip.create(this.tripId);
 
         const driver = await User.create(this.driverId);
-        const traveler = await User.create(travelerId);
+        const traveler = await User.create(this.travelerId);
 
         const message = Messages.reserveTrip(
-            traveler.getFullname(), trip.from(), trip.to()
+            traveler.getFullname(), trip.getFrom(), trip.getTo()
         );
 
         await driver.notify({
@@ -112,7 +114,7 @@ export default class Reserve {
 
     static travelerIsDriverOfTrip(trip, travelerId) {
         if (trip.isDriver(travelerId)) {
-            throw new Error(Messages.ERROR_TRAVELER_IS_DRIVER);
+            throw new Error(Messages.ERROR_TRAVELER_IS_DRIVER());
         }
     }
 
@@ -123,7 +125,7 @@ export default class Reserve {
         });
 
         if (thereIsReservation) {
-            throw new Error(Messages.ERROR_RESERVATION_ALREADY_EXISTS);
+            throw new Error(Messages.ERROR_RESERVATION_ALREADY_EXISTS());
         }
     }
 
@@ -143,7 +145,7 @@ export default class Reserve {
         try {
             Token.verify(this.accessToken);
         } catch(err) {
-            throw new Error(Messages.ERROR_RESERVATION_TOKEN_EXPIRED_OR_INVALID)
+            throw new Error(Messages.ERROR_RESERVATION_TOKEN_EXPIRED_OR_INVALID())
         }
 
         this.wasAccepted();
@@ -184,7 +186,7 @@ export default class Reserve {
             return {status: this.status};
         }
     
-        throw new Error(Messages.ERROR_TOKEN_IS_STILL_VALID);
+        throw new Error(Messages.ERROR_TOKEN_IS_STILL_VALID());
     }
 
 }
