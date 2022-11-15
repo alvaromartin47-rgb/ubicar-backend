@@ -15,4 +15,12 @@ export default class Messages {
     static ERROR_RESERVATION_WAS_ALREADY_ACCEPT() {
         return "Reservation was alredy accept";
     }
+
+    static ERROR_RESERVATION_ALREADY_EXISTS() {
+        return "A reservation already exists";
+    }
+
+    static ERROR_TRAVELER_IS_DRIVER() {
+        return "You can't book your own trip";
+    }
 }

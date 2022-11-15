@@ -1,8 +1,9 @@
 import ReserveSchema from '../../services/db/models/ReserveSchema';
-import UserSchema from '../../services/db/models/UserSchema';
 import Messages from './Messages';
 import User from './User';
 import Token from './Token';
+import Payment from './Payment';
+import Trip from './Trip';
 
 
 export default class Reserve {
@@ -13,75 +14,91 @@ export default class Reserve {
         this.travelerId = reserve.travelerId;
         this.driverId = reserve.driverId;
         this.status = reserve.status;
+        this.payment = reserve.payment;
+        this.accessToken = reserve?.access_token;
     }
 
-    static async create(trip, userId) {
-        const { name, lastname } = await UserSchema.findById(userId);
-        const isExistentReserve = await ReserveSchema.find({
-            tripId: trip.tripId,
-            travelerId: userId
-        });
+    static async create(tripId, travelerId, paymentData) {
+        const trip = await Trip.create(tripId);
 
-        if (isExistentReserve.length === 1) return { 
-            "message": "A reservation already exists",
-            "status_code": 400
-        }
+        Reserve.travelerIsDriverOfTrip(trip, travelerId);
+        await Reserve.travelerAlreadyBooked(tripId, travelerId);
+
+        const paymentReservation = await Payment.reserve(paymentData);
+        const driverId = trip.getDriverId();
+
+        const reservation = new Reserve(await Reserve.saveInDB(
+            tripId, paymentReservation, driverId, travelerId
+        ));
+
+        await reservation.generateToken();
+        await reservation.notifyDriver();
+
+        return reservation;
+    }
+
+    status() {
+        return this.status;
+    }
     
-        const newReserve = new ReserveSchema({
-            tripId: trip.tripId,
-            driverId: trip.driver.id,
-            travelerId: userId
-        });
-        const { id, status } = await newReserve.save();
+    async notifyDriver() {
+        const trip = await Trip.create(this.tripId);
 
-        const accessToken = Token.generate(
-            { reservationId: id, userId: trip.driver.id },
+        const driver = await User.create(this.driverId);
+        const traveler = await User.create(travelerId);
+
+        const message = Messages.reserveTrip(
+            traveler.getFullname(), trip.from(), trip.to()
+        );
+
+        await driver.notify({
+            message,
+            image: '',
+            subject: '¡Tienes una nueva reserva!',
+            html: `<h4>${message}</h4>`,
+            access_token: this.accessToken
+        });
+    }
+
+    async generateToken() {
+        this.accessToken = Token.generate(
+            { reservationId: this.id, userId: this.userId },
             process.env.TIME_DRIVER_ACCEPT_RESERVATION,
             process.env.PRIVATE_PWD_RESERVATION
         );
 
-        await ReserveSchema.findByIdAndUpdate(id, {
-            access_token: accessToken
-        });
-
-        const l = trip.route.nodes.length;
-        const from = trip.route.nodes[0].city.name;
-        const to = trip.route.nodes[l - 1].city.name;
-
-        const user = await User.create(trip.driver.id);
-        const message = Messages.reserveTrip(
-            `${name} ${lastname}`,
-            from,
-            to
-        );
-
-        await user.notify({
-            message,
-            image: '' ,
-            subject: '¡Tienes una nueva reserva!',
-            html: `<h4>${message}</h4>`,
-            access_token: accessToken
-        });
-
-        return { 
-            status,
-            status_code: 200
-        };
+        await this.setAccessTokenInDB();
     }
 
-    static async instanceWith(reservationId) {
-        try {
-            const reserve = await ReserveSchema.findById(reservationId);
-            if (!reserve) throw Error();
-            return new Reserve(reserve);
-        } catch(err) {
-            throw new Error(Messages.ERROR_RESERVE_NOT_EXIST());
+    async setAccessTokenInDB() {
+        await ReserveSchema.findByIdAndUpdate(this.id, {
+            access_token: this.accessToken
+        });
+    }
+
+    static async saveInDB(tripId, payment, driverId, travelerId) {
+        const newReserve = new ReserveSchema({
+            tripId, payment, driverId, travelerId
+        });
+
+        return await newReserve.save();
+    }
+
+    static travelerIsDriverOfTrip(trip, travelerId) {
+        if (trip.isDriver(travelerId)) {
+            throw new Error(Messages.ERROR_TRAVELER_IS_DRIVER);
         }
-
     }
 
-    canPay() {
-        return this.status === "accepted";
+    static async travelerAlreadyBooked(tripId, travelerId) {
+        const thereIsReservation = await ReserveSchema.findOne({
+            tripId,
+            travelerId
+        });
+
+        if (thereIsReservation) {
+            throw new Error(Messages.ERROR_RESERVATION_ALREADY_EXISTS);
+        }
     }
 
     async accept() {
@@ -91,7 +108,7 @@ export default class Reserve {
 
         const update = { status: "accepted" };
         await ReserveSchema.findByIdAndUpdate(this.id, update);
-        
+
         update.status_code = 200;
         return update;
     }

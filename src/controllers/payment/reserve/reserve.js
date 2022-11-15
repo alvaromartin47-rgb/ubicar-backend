@@ -1,70 +1,22 @@
-import mercadopago from 'mercadopago';
-import TripSchema from '../../../services/db/models/TripSchema';
 import Reserve from '../../entities/Reserve';
-import Messages from '../../entities/Messages';
 
 async function reserve(req, res) {
+    const travelerId = req.userId;
     const tripId = req.params.tripId;
-    const isTrip = await TripSchema.findOne({tripId});
-
-    if (!isTrip) return res.status(404).json({
-        message: "Trip not found"
-    });
-
+    const paymentData = req.body;
+    
     try {
-        const iReserve = await Reserve.instanceWith(tripId, req.userId);
-        if (!iReserve.canPay()) {
-            throw new Error(Messages.ERROR_PAYMENT_RESERVE_PENDING)
-        }
+        const reservation = await Reserve.create(
+            tripId,
+            travelerId,
+            paymentData
+        );
+
+        return res.json({status: reservation.status()})
     } catch(err) {
-        const resJson = { message: err.message, status_code: 400 }
-        return res.status(resJson.status_code).json(resJson);
+        const resJson = { message: err.message }
+        return res.json(resJson);
     }
-    
-    req.body.capture = false;
-    mercadopago.configurations.setAccessToken(
-        process.env.MP_ACCESS_TOKEN
-    );
-    
-    const data = (await mercadopago.payment.create(
-        req.body
-    )).response;
-
-    const paymentObj = { payment: isTrip.payment };
-    paymentObj.payment.push({
-        id: data.id,
-        status: data.status,
-        status_detail: data.status_detail,
-        payment_method_id: data.payment_method_id,
-        payment_type_id: data.payment_type_id,
-        description: data.description,
-        payer: {
-            userId: req.userId,
-            first_name: data.payer.first_name,
-            last_name: data.payer.last_name,
-            email: data.payer.email,
-            identification: data.payer.identification
-        },
-        transaction_amount: data.transaction_amount,
-        fee_details: data.fee_details,
-        card: data.card
-    });
-
-    await TripSchema.updateOne(
-        {tripId},
-        {
-            payment: paymentObj.payment,
-            passengers: {
-                avaiable: isTrip.passengers.avaiable - 1
-            }
-        }
-    )
-
-    res.json({
-        id: data.id,
-        status: data.status,
-        status_detail: data.status_detail
-    });
 }
 
 export default reserve;

@@ -5,6 +5,8 @@ export default class User {
 
     constructor(data) {
         this.data = data;
+        this.name = data.name;
+        this.lastname = data.lastname;
         this.id = data.id;
         this.email = data.email;
     }
@@ -16,6 +18,10 @@ export default class User {
         }
 
         return new User(data);
+    }
+
+    getFullname() {
+        return `${this.name} ${this.lastname}`;
     }
 
     async notify(notification) {

@@ -43,6 +43,8 @@ async function id(req, res) {
         verification: data.dniVerification
     }
 
+    req.body.passengers.available = req.body.passengers.count;
+
     const newTrip = new TripSchema(req.body);
     await newTrip.save();
 
