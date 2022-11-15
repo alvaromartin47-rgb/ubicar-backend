@@ -23,4 +23,12 @@ export default class Messages {
     static ERROR_TRAVELER_IS_DRIVER() {
         return "You can't book your own trip";
     }
+
+    static ERROR_RESERVATION_TOKEN_EXPIRED_OR_INVALID() {
+        return "Reservation token is expired or invalid";
+    }
+
+    static ERROR_TOKEN_IS_STILL_VALID() {
+        return "Access Token is still valid";
+    }
 }

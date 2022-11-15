@@ -1,6 +1,25 @@
 import mercadopago from "mercadopago";
+import ReserveSchema from '../../services/db/models/ReserveSchema';
 
 export default class Payment {
+
+    constructor(payment) {
+        this.mercadopago = mercadopago;
+        this.mercadopago.configurations.setAccessToken(
+            process.env.MP_ACCESS_TOKEN
+        );
+
+        this.id = payment.id;
+    }
+
+    static async create(reservationId) {
+        const data = await ReserveSchema.findById(reservationId);
+        if (!data) {
+            throw new Error('Payment not found');
+        }
+
+        return new Payment(data.payment);
+    }
 
     static async reserve(paymentData) {
         paymentData.capture = false;
@@ -31,4 +50,14 @@ export default class Payment {
             card: data.card
         };
     }
+
+    static async cancel() {
+        const data = (await this.mercadopago.payment.cancel(
+            this.id,
+            this.mercadopago
+        )).response;
+
+        return data;
+    }
+
 }
