@@ -50,8 +50,17 @@ export default class Payment {
         };
     }
 
-    static async cancel() {
+    async cancel() {
         const data = (await this.mercadopago.payment.cancel(
+            this.id,
+            this.mercadopago
+        )).response;
+
+        return data;
+    }
+
+    async capture() {
+        const data = (await this.mercadopago.payment.capture(
             this.id,
             this.mercadopago
         )).response;

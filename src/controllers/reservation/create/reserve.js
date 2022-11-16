@@ -1,4 +1,4 @@
-import Reserve from '../../entities/Reserve';
+import Reserve from '../../entities/Reservation/Reserve';
 
 async function reserve(req, res) {
     const travelerId = req.userId;

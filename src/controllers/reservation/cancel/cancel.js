@@ -1,4 +1,5 @@
-import Reserve from '../../entities/Reserve';
+import Reserve from '../../entities/Reservation/Reserve';
+import Token from '../../entities/Token';
 
 async function cancel(req, res) {
     const {access_token} = req.body;

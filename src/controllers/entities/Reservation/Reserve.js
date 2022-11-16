@@ -1,9 +1,9 @@
-import Messages from './Messages';
-import User from './User';
-import Token from './Token';
-import Payment from './Payment';
-import Trip from './Trip';
-import ReserveSchema from '../../services/db/models/ReserveSchema';
+import Messages from '../Messages';
+import User from '../User';
+import Token from '../Token';
+import Payment from '../Payment';
+import Trip from '../Trip';
+import ReserveSchema from '../../../services/db/models/ReserveSchema';
 
 export default class Reserve {
 
@@ -143,7 +143,7 @@ export default class Reserve {
         this.tokenExists();
 
         try {
-            Token.verify(this.accessToken);
+            Token.verify(this.accessToken, process.env.PRIVATE_PWD_RESERVATION);
         } catch(err) {
             throw new Error(Messages.ERROR_RESERVATION_TOKEN_EXPIRED_OR_INVALID())
         }
@@ -169,16 +169,15 @@ export default class Reserve {
         this.tokenExists();
 
         try {
-            Token.verify(this.accessToken);
-        } catch(err) {
+            Token.verify(this.accessToken, process.env.PRIVATE_PWD_RESERVATION);
+        } catch (err) {
             const payment = new Payment(this.payment);
             const canceled = await payment.cancel();
     
             await this.update({status: "canceled",
                 payment: {
                     status: canceled.status,
-                    status_detail:
-                    canceled.status_detail
+                    status_detail: canceled.status_detail
             }});
             
             await this.notifyTravelerCanceled();

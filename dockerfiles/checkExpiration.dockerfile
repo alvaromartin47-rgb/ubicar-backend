@@ -10,6 +10,7 @@ RUN npm install -g @babel/cli
 RUN npm install -g @babel/register
 RUN npm install jsonwebtoken
 RUN npm install dotenv
+RUN npm install axios
 
 RUN apk add bash
 RUN apk add nano

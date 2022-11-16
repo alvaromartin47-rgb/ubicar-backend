@@ -57,7 +57,7 @@ const reserveSchema = new Schema({
     travelerId: { type: String },
     status: { type: String, default: "pending" },
     access_token: { type: String },
-    payment: [payment]
+    payment: payment
 }, {
     toJSON: {transform: replace_id}
 });

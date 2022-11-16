@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import "../db/db";
+import axios from 'axios';
 import Token from "./Token";
 
 import ReserveSchema from "../db/models/ReserveSchema";
@@ -13,13 +14,26 @@ async function checkExpirationReservations(res) {
     
     for (let r of res) {
         try {
-            await Token.verify(
+            Token.verify(
                 r.access_token,
                 process.env.PRIVATE_PWD_RESERVATION
             );
         } catch(err) {
             if (r.status === "accepted") break;
-            await ReserveSchema.findByIdAndRemove(r.id)
+
+            const access_token = Token.generate(
+                {userId: 1234}, 
+                60*60, 
+                process.env.PRIVATE_PWD
+            );
+
+            const res = await axios.post(
+                "http://ubicar_api_dev:4000/api/trip/reservation/cancel/",
+                {access_token},
+                {headers: {'authorization': `Basic ${r.access_token}`}}
+            );
+            
+            console.log(res);
             revoked++;
         }
     }
