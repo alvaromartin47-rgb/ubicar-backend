@@ -1,6 +1,6 @@
 import City from "../entities/City";
 import TripSchema from "../../services/db/models/TripSchema";
-import UserSchema from "../../services/db/models/UserSchema";
+import UserSchema from "../../services/db/models/UserModel";
 
 async function id(req, res) {
     req.body.tripId = req.params.id;
