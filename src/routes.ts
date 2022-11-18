@@ -6,12 +6,12 @@
 // import driver from './routes/driver';
 import auth from './routes/auth'
 // import payment from './routes/payment';
-// import user from './routes/user';
+import user from './routes/user'
 import { Application } from 'express'
 
 export default function routes (app: Application): void {
   app.use('/api/auth', auth)
-  // app.use("/api/user", user);
+  app.use('/api/user', user)
   // app.use("/api/trip", trip);
   // app.use("/api/trips", trips);
   // app.use("/api/city", city);

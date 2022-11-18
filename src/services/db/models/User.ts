@@ -1,25 +1,13 @@
+import INotification from './Notification'
 import { prop, modelOptions, getModelForClass } from '@typegoose/typegoose'
-import { replaceId } from './functions'
-
-@modelOptions({ schemaOptions: { _id: false } })
-class Notification {
-  @prop()
-    message!: string
-
-  @prop()
-    image!: string
-
-  @prop()
-    access_token!: string
-}
 
 @modelOptions({ schemaOptions: { _id: false } })
 class Notifications {
-  @prop({ default: 0 })
+  @prop({ required: true, default: 0 })
     quantity!: number
 
-  @prop({ type: () => [Notification] })
-    notifications!: Notification[]
+  @prop({ type: () => [INotification] })
+    notifications!: INotification[]
 }
 
 @modelOptions({ schemaOptions: { _id: false } })
@@ -31,8 +19,7 @@ class Rating {
     average!: number
 }
 
-@modelOptions({ schemaOptions: { toJSON: { transform: replaceId } } })
-export class User {
+export class IUser {
   @prop({ required: true, unique: true })
   public email!: string
 
@@ -76,4 +63,8 @@ export class User {
   public rating?: Rating
 }
 
-export const UserModel = getModelForClass(User)
+export class IUserWithID extends IUser {
+  _id!: string
+}
+
+export const UserModel = getModelForClass(IUser)

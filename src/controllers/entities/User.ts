@@ -1,40 +1,46 @@
-import UserSchema from '../../services/db/models/UserModel'
+import { IUser, UserModel } from '../../services/db/models/User'
+import INotification from '../../services/db/models/Notification'
 import Emailer from '../entities/Emailer'
 
-export default class User {
-  constructor (data) {
-    this.data = data
+class IUserWithID extends IUser {
+  _id!: string
+}
+
+export default class User extends IUserWithID {
+  constructor (data: IUserWithID) {
+    super()
+
     this.name = data.name
     this.lastname = data.lastname
-    this.id = data.id
+    this._id = data._id
     this.email = data.email
+    this.notifications = data.notifications
   }
 
-  static async create (userId) {
-    const data = await UserSchema.findById(userId)
-    if (!data) {
-      throw new Error('User not found')
-    }
+  static async create (userId: string): Promise<User> {
+    const data = await UserModel.findById(userId)
+    if (!data) throw new Error('User not found')
 
     return new User(data)
   }
 
-  getFullname () {
+  getFullname (): string {
     return `${this.name} ${this.lastname}`
   }
 
-  async notify (notification) {
-    const update = this.data.notifications
+  async notify (notification: INotification): Promise<void> {
+    const update = this.notifications
+    if (!update) return
 
-    update.quantity = update.quantity + 1
+    update.quantity += 1
     update.notifications.push(notification)
 
-    const subject = notification.subject
-    const html = notification.html
+    const emailer = new Emailer(notification)
 
-    const emailer = new Emailer(this.email, subject, html)
     await emailer.send()
 
-    await UserSchema.findByIdAndUpdate(this.id, { notifications: update })
+    await UserModel.findByIdAndUpdate(this._id, {
+      notifications: update
+    })
   }
 }

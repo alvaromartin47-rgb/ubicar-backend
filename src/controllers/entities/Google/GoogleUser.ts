@@ -1,4 +1,4 @@
-import { User, UserModel } from '../../../services/db/models/User'
+import { IUser, UserModel } from '../../../services/db/models/User'
 import { GoogleProfile } from './types'
 
 export default class GoogleUser {
@@ -20,7 +20,7 @@ export default class GoogleUser {
     return new GoogleUser(data)
   }
 
-  static async saveInDB (user: User): Promise<string> {
+  static async saveInDB (user: IUser): Promise<string> {
     if (!user.email) {
       throw new Error('Email is required')
     }
