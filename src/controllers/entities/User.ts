@@ -6,6 +6,8 @@ class IUserWithID extends IUser {
   _id!: string
 }
 
+type UpdateProfile = Partial<Omit<IUser, 'email'>>
+
 export default class User extends IUserWithID {
   constructor (data: IUserWithID) {
     super()
@@ -42,5 +44,13 @@ export default class User extends IUserWithID {
     await UserModel.findByIdAndUpdate(this._id, {
       notifications: update
     })
+  }
+
+  static async update (id: string, body: UpdateProfile): Promise<void> {
+    try {
+      await UserModel.findByIdAndUpdate(id, body)
+    } catch (error) {
+      throw new Error('User not found')
+    }
   }
 }
