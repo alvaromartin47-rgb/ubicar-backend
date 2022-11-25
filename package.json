@@ -9,8 +9,8 @@
     "dev-ts": "ts-node-dev src/index.ts",
     "test": "./scripts/test.sh",
     "jest": "jest",
-    "compose-dev": "./scripts/compose-dev.sh",
-    "compose-prod": "./scripts/compose-prod.sh",
+    "compose:dev": "./scripts/compose-dev.sh",
+    "compose:prod": "./scripts/compose-prod.sh",
     "build": "tsc"
   },
   "keywords": [],

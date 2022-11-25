@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+
+    ubicar_db:
+        container_name: mongodb
+        image: mongo:4.2.22
+        ports:
+            - "${DB_PORT}:${DB_PORT}"
+        # volumes:
+        #     - ${MONGO_DATA_PATH}:/data/db
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+            MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+
+    ubicar_api_dev:
+        container_name: ubicar_api_dev
+        build:
+            context: .
+            dockerfile: docker/dev/Dockerfile
+        image: ubicar-api-dev-ts
+        ports: 
+            - "${PORT}:${PORT}"
+        links:
+            - ubicar_db
+        depends_on:
+            - ubicar_db
+        restart: always
+        volumes:
+            - ./:/usr/src/app/
+
+    # check_expiration:
+    #     container_name: check_expiration
+    #     build:
+    #         context: .
+    #         dockerfile: docker/checkExpiration.dockerfile
+    #     image: ubicar-check-expiration
+    #     links:
+    #         - ubicar_db
+    #     depends_on:
+    #         - ubicar_db
+    #     restart: always
+
+    # ubicar_local_tunnel_api:
+    #     container_name: ubicar_local_tunel_api
+    #     build:
+    #         context: .
+    #         dockerfile: docker/localtunnel.dockerfile
+    #     image: sv-localtunnel
+    #     links:
+    #         - ubicar_api_dev
+    #     depends_on: 
+    #         - ubicar_api_dev
+    #     command: "lt -p ${PORT} -l ubicar_api_dev -s ubicar-api-dev"

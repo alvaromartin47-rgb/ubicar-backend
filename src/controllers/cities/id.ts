@@ -1,4 +1,4 @@
-import City from "../entities/City";
+import City from "../entities/City/City";
 
 async function id(req, res) {
     const cityId = req.params.id;

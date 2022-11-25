@@ -1,4 +1,4 @@
-import City from "../entities/City";
+import City from "../entities/City/City";
 import TripSchema from "../../services/db/models/TripSchema";
 import UserSchema from "../../services/db/models/UserModel";
 

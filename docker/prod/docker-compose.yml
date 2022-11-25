@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+
+    ubicar_db:
+        container_name: mongodb
+        image: mongo:4.2.22
+        ports:
+            - "${DB_PORT}:${DB_PORT}"
+        volumes:
+            - ${MONGO_DATA_PATH}:/data/db
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+            MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    
+    ubicar_api_production:
+        container_name: ubicar_api_production
+        build:
+            context: .
+            dockerfile: docker/prod/Dockerfile
+        image: ubicar-api-production
+        ports: 
+            - "${PORT}:${PORT}"
+        links:
+            - ubicar_db
+        depends_on:
+            - ubicar_db
+        restart: always

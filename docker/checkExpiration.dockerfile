@@ -16,8 +16,7 @@ RUN apk add bash
 RUN apk add nano
 
 COPY src/services/ .
-COPY babel.config.js .
 COPY .env .
-COPY src/controllers/entities/Token.js ./checkExpiration/
+COPY src/controllers/entities/Token.ts ./checkExpiration/
 
 CMD [ "bash", "checkExpiration/sleep.sh" ]
