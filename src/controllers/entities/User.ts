@@ -1,4 +1,4 @@
-import { IUser, UserModel } from '../../services/db/models/User'
+import { UserModel, IUser } from '../../services/db/models/User'
 import INotification from '../../services/db/models/Notification'
 import Emailer from '../entities/Emailer'
 

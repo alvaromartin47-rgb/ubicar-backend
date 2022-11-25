@@ -1,8 +1,8 @@
 import axios from 'axios'
-import IRoute from './Route/interfaces/IRoute'
+import { Route } from '../../services/db/models/Route'
 import City from './City/City'
 
-export default class Route {
+export default class IRoute {
   orig: City
   dest: City
   wps: City[]
@@ -15,7 +15,7 @@ export default class Route {
     this.info = info
   }
 
-  static async create (orig: City, dest: City, wps: City[]): Promise<Route> {
+  static async create (orig: City, dest: City, wps: City[]): Promise<IRoute> {
     const objParams = {
       apikey: process.env.MY_MAPPI_TOKEN as string,
       orig: orig.getCoordinates(),
@@ -28,10 +28,10 @@ export default class Route {
 
     const res: any = await axios.get(`${url}?${params}`)
 
-    return new Route(orig, dest, wps, res.data)
+    return new IRoute(orig, dest, wps, res.data)
   }
 
-  getPreview (): IRoute {
+  getPreview (): Route {
     const nodes = []
     const trip = this.info.data.routes[0].legs
 

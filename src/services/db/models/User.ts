@@ -1,22 +1,17 @@
-import INotification from './Notification'
+import Notification from './Notification'
+import { Rating } from './Rating'
 import { prop, modelOptions, getModelForClass } from '@typegoose/typegoose'
 
-@modelOptions({ schemaOptions: { _id: false } })
+@modelOptions({
+  schemaOptions: { _id: false },
+  options: { allowMixed: 0 }
+})
 class Notifications {
-  @prop({ required: true, default: 0 })
-    quantity!: number
-
-  @prop({ type: () => [INotification] })
-    notifications!: INotification[]
-}
-
-@modelOptions({ schemaOptions: { _id: false } })
-class Rating {
   @prop({ default: 0 })
     quantity!: number
 
-  @prop({ default: 0 })
-    average!: number
+  @prop()
+    notifications!: Notification[]
 }
 
 export class IUser {
@@ -35,7 +30,7 @@ export class IUser {
   @prop()
   public googleCode!: string
 
-  @prop({ type: () => Notifications, default: {} })
+  @prop({ default: {} })
   public notifications?: Notifications
 
   @prop()
@@ -56,10 +51,10 @@ export class IUser {
   @prop()
   public mobile?: number
 
-  @prop()
+  @prop({ default: 0 })
   public travels?: number
 
-  @prop({ type: () => Rating, default: {} })
+  @prop({ default: {} })
   public rating?: Rating
 }
 

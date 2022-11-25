@@ -1,5 +1,7 @@
-export default async function check(req, res) {
-    req.body.tripId = req.params.id;
+import { Request, Response } from 'express'
 
-    // Calcular costo de servicio
+export default async function check (req: Request, _: Response): Promise<void> {
+  req.body.tripId = req.params.id
+
+  // Calcular costo de servicio
 }

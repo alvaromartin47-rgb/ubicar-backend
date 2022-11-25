@@ -1,6 +1,6 @@
 import ICity from '../../City/interfaces/ICity'
 
-interface INode {
+export interface INode {
   city: ICity
   datetime?: string
   distance: number

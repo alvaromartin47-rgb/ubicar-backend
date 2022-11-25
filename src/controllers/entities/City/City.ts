@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Route from '../Route'
 import IRoute from '../Route/interfaces/IRoute'
-import ICity from './interfaces/ICity'
+import { ICity } from '../../../services/db/models/City'
 
 export default class City {
   city: ICity

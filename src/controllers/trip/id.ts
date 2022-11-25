@@ -1,54 +1,61 @@
-import City from "../entities/City/City";
-import TripSchema from "../../services/db/models/TripSchema";
-import UserSchema from "../../services/db/models/UserModel";
+import City from '../entities/City/City'
+import { ICity } from '../../services/db/models/City'
+import { TripModel } from '../../services/db/models/Trip'
+import { IUser, UserModel } from '../../services/db/models/User'
+import { Request, Response } from 'express'
+import { ReqChecked } from '../../types/Express'
+import { Driver } from '../../services/db/models/Driver'
 
-async function id(req, res) {
-    req.body.tripId = req.params.id;
+async function id (req: Request, res: Response): Promise<Response> {
+  const reqC = req as ReqChecked
 
-    const { routeNodes } = req.body;
-    const len = routeNodes.length;
-    if (len < 2) res.status(400).send("Error");
+  reqC.body.tripId = reqC.params.id
 
-    req.body.fromCityId = req.body.routeNodes[0].cityId;
-    req.body.toCityId = req.body.routeNodes[len - 1].cityId;
-    req.body.date = new Date(req.body.datetime);
-    req.body.passengers.avaiable = req.body.passengers.count;
+  const { routeNodes } = reqC.body
+  const len = routeNodes.length
+  if (len < 2) res.status(400).send('Error')
 
-    // set route (Idem Preview, refactorizar)
+  reqC.body.fromCityId = reqC.body.routeNodes[0].cityId
+  reqC.body.toCityId = reqC.body.routeNodes[len - 1].cityId
+  reqC.body.date = new Date(reqC.body.datetime)
+  reqC.body.passengers.avaiable = reqC.body.passengers.count
 
-    const nodes = req.body.routeNodes;
-    const ult = nodes.length - 1;
-    const nodeOrig = await City.create(nodes[0].cityId);
-    const nodeDest = await City.create(nodes[ult].cityId);
-    
-    const nodesCopy = req.body.routeNodes.slice()
-    nodesCopy.shift();
-    nodesCopy.pop();
-    
-    const cityNodes = await Promise.all(
-        nodesCopy.map(async (c) => await City.create(c.cityId)
-    ));
+  // set route (Idem Preview, refactorizar)
 
-    req.body.route = await nodeOrig.getRouteTo(nodeDest, cityNodes);
-    
-    // Get driver (refactorizar)
+  const nodes = reqC.body.routeNodes
+  const ult = nodes.length - 1
+  const nodeOrig = await City.create(nodes[0].cityId)
+  const nodeDest = await City.create(nodes[ult].cityId)
 
-    const data = await UserSchema.findById(req.userId);
-    req.body.driver = {
-        id: req.userId,
-        displayName: `${data.name} ${data.lastname}`,
-        image: data.image,
-        travels: data.travels,
-        rating: data.rating,
-        verification: data.dniVerification
-    }
+  const nodesCopy = reqC.body.routeNodes.slice()
+  nodesCopy.shift()
+  nodesCopy.pop()
 
-    req.body.passengers.available = req.body.passengers.count;
+  const cityNodes = await Promise.all(
+    nodesCopy.map(async (c: ICity): Promise<City> => await City.create(c.cityId)
+    ))
 
-    const newTrip = new TripSchema(req.body);
-    await newTrip.save();
+  reqC.body.route = await nodeOrig.getRouteTo(nodeDest, cityNodes)
 
-    res.status(201).end()
+  // Get driver (refactorizar)
+
+  const data = await UserModel.findById(reqC.userId) as IUser
+
+  const driver: Driver = {
+    id: reqC.userId,
+    displayName: `${data.name} ${data.lastname}`,
+    image: data.image,
+    travels: data.travels,
+    rating: data.rating,
+    dniVerificated: data.dniVerificated
+  }
+  reqC.body.driver = driver
+  reqC.body.passengers.available = reqC.body.passengers.count
+
+  const newTrip = new TripModel(reqC.body)
+  await newTrip.save()
+
+  return res.status(201).end()
 }
 
-export default id;
+export default id

@@ -1,4 +1,4 @@
-import TripSchema from "../../../services/db/models/TripSchema";
+import TripSchema from "../../../services/db/models/Trip";
 
 function getRelativeEpoch(epochUTC, diference) {
     let epochUTCCopy = epochUTC;
