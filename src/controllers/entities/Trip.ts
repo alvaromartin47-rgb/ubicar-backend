@@ -1,35 +1,37 @@
-import TripSchema from '../../services/db/models/Trip'
+import { ITrip, TripModel } from '../../services/db/models/Trip'
 
 export default class Trip {
-  constructor (trip) {
-    this.id = trip.tripId
-    this.driverId = trip.driver.id
+  private readonly trip: ITrip
 
-    const l = trip.route.nodes.length
-    this.from = trip.route.nodes[0].city.name
-    this.to = trip.route.nodes[l - 1].city.name
+  constructor (trip: ITrip) {
+    this.trip = trip
   }
 
-  static async create (tripId) {
-    const data = await TripSchema.findOne({ tripId })
+  static async create (tripId: string): Promise<Trip> {
+    const data = await TripModel.findOne({ tripId })
     if (!data) throw new Error('Trip not found')
 
     return new Trip(data)
   }
 
-  getFrom () {
-    return this.from
+  getData (): ITrip {
+    return this.trip
   }
 
-  getTo () {
-    return this.to
+  getFrom (): string {
+    return this.trip.route.nodes[0].city.name
   }
 
-  getDriverId () {
-    return this.driverId
+  getTo (): string {
+    const l = this.trip.route.nodes.length - 1
+    return this.trip.route.nodes[l].city.name
   }
 
-  isDriver (userId) {
-    return userId === this.driverId
+  getDriverId (): string {
+    return this.trip.driver.id
+  }
+
+  isDriver (userId: string): boolean {
+    return userId === this.trip.driver.id
   }
 }

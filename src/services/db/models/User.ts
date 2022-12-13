@@ -1,4 +1,4 @@
-import Notification from './Notification'
+import { Notification } from './Notification'
 import { Rating } from './Rating'
 import { prop, modelOptions, getModelForClass } from '@typegoose/typegoose'
 

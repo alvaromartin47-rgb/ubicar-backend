@@ -2,6 +2,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 
 interface BodyTokenJWT {
   userId: string
+  reservationId?: string
 }
 
 export default class Token {
@@ -11,7 +12,7 @@ export default class Token {
     })
   }
 
-  static verify (token: string, privatePwd: string): JwtPayload | string {
+  static verify (token: string, privatePwd: string): string | JwtPayload {
     return jwt.verify(token, privatePwd)
   }
 

@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 export interface ReqChecked extends Request {
   userId: string
+  reservationId?: string
   headers: {
     authorization: string
   }

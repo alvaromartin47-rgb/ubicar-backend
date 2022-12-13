@@ -1,12 +1,12 @@
 import { prop, modelOptions } from '@typegoose/typegoose'
 
 @modelOptions({ schemaOptions: { _id: false } })
-export default class Notification {
+export class Notification {
   @prop()
     message!: string
 
   @prop()
-    access_token!: string
+    access_token?: string
 
   @prop()
     subject!: string

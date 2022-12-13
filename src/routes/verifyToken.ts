@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import Token from '../controllers/entities/Token'
-import User from '../controllers/entities/User'
+import Common from '../controllers/entities/User/Common/Common'
 import { ReqChecked } from '../types/Express'
 
 const verifyToken = async (
   req: Request, res: Response, next: NextFunction
 ): Promise<any> => {
   const reqC = req as ReqChecked
-
   const token = reqC.headers.authorization.split(' ')[1]
 
   try {
@@ -17,7 +16,7 @@ const verifyToken = async (
     ) as { userId: string }
 
     reqC.userId = userId
-    await User.create(userId)
+    await Common.create(userId)
 
     next()
   } catch ({ message }) {

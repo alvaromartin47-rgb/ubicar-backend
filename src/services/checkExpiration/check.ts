@@ -6,7 +6,7 @@ import "../db/db";
 import axios from 'axios';
 import Token from "./Token";
 
-import ReserveSchema from "../db/models/ReserveSchema";
+import ReserveSchema from "../db/models/Reserve";
 
 async function checkExpirationReservations(res) {
     const analized = res.length;
