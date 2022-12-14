@@ -11,7 +11,7 @@ jobs:
   build:
 
     runs-on: self-hosted
-
+    environment: ubicar
     steps:
     - uses: actions/checkout@v3
     - name: Remove current containers
