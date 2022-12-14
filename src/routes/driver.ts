@@ -1,9 +1,9 @@
-import express from 'express';
-const router = express.Router();
+import express from 'express'
 
-import verifyToken from './verifyToken';
-import transports from '../controllers/driver/transports/transports.js';
+import verifyToken from './verifyToken'
+import transports from '../controllers/driver/transports/transports.js'
+const router = express.Router()
 
-router.get("/transports/", transports);
+router.get('/transports/', verifyToken, transports)
 
-export default router;
+export default router

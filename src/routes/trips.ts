@@ -1,9 +1,9 @@
-import express from 'express';
-const router = express.Router();
+import express from 'express'
 
-import verifyToken from './verifyToken';
-import search from '../controllers/trips/search/search';
+import verifyToken from './verifyToken'
+import search from '../controllers/trips/search/search'
+const router = express.Router()
 
-router.post("/search/", search);
+router.post('/search/', verifyToken, search)
 
-export default router;
+export default router
