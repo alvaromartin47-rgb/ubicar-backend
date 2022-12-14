@@ -1,0 +1,22 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Remove current containers
+      run: docker rm ubicar_api_dev
+    - name: Build the Docker image
+      run: docker build -t ubicar-api-production .
+    - name: Restart containers
+      run: npm run compose:dev
