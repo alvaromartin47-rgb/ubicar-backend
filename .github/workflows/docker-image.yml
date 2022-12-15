@@ -17,5 +17,7 @@ jobs:
       run: docker rm ubicar_api_prod -f
     - name: Copy env file
       run: cp /home/ubicar/.env ./
+    - name: Install dependencies
+      run: npm install
     - name: Restart containers
-      run: npm run compose:prod
+      run: npm run compose:dev
