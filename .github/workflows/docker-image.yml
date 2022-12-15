@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Remove current containers
-      run: docker rm ubicar_api_dev -f
+      run: docker rm ubicar_api_prod -f
     - name: Copy env file
       run: cp /home/ubicar/.env ./
     - name: Restart containers
